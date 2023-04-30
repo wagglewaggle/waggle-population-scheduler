@@ -3,25 +3,16 @@ import * as Sentry from '@sentry/node';
 import { IncomingWebhook } from '@slack/webhook';
 import { JobType } from '../app.constant';
 import { config } from '../config/config.service';
-import { ISentryError } from './sentry.constant';
 
 @Injectable()
 export class SentryService {
-  sendError(e: ISentryError, jobType: JobType) {
+  sendError(e: any, jobType: JobType) {
     Sentry.captureException(e);
 
-    const { error, place } = e;
-
-    if (jobType === JobType.KT) {
-      this.send(jobType, `Request Message: ${error.message}`, `Error Place: ${JSON.stringify(place)}\n\nError: ${JSON.stringify(error)}`);
+    if (e instanceof Error) {
+      this.send(jobType, e.message, e.stack);
     } else {
-      const errorPath = error.request.path;
-      const errorDataMsg = JSON.stringify(error.response.data);
-      this.send(
-        jobType,
-        `Request Message: ${error.message}`,
-        `Error Place: ${JSON.stringify(place)}\n\nError Path: ${errorPath}\n\nError Message : ${errorDataMsg}`,
-      );
+      this.send(jobType, 'unknown error', JSON.stringify(e));
     }
   }
 

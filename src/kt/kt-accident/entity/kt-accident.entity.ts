@@ -1,6 +1,6 @@
 import { KtAccident } from 'waggle-entity/dist/kt-accident/kt-accident.entity';
 import { KtPlace } from 'waggle-entity/dist/kt-place/kt-place.entity';
-import { IAccidentControlStatus } from '../../kt-job/kt-city-data.interface';
+import { IAccidentControlStatus } from '../../../job/kt-city-data.interface';
 
 export class KtAccidentEntity extends KtAccident {
   readonly type: string;

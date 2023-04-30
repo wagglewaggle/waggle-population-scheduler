@@ -9,7 +9,7 @@ import { KtAccidentService } from '../kt/kt-accident/kt-accident.service';
 import { KtRoadTrafficService } from '../kt/kt-road-traffic/kt-road-traffic.service';
 import { DataSource, EntityManager, QueryRunner } from 'typeorm';
 import { KtPlace } from 'waggle-entity/dist/kt-place/kt-place.entity';
-import { IAccidentObject, IKtCityData } from '../kt/kt-job/kt-city-data.interface';
+import { IAccidentObject, IKtCityData } from './kt-city-data.interface';
 import { KtAccidentEntity } from '../kt/kt-accident/entity/kt-accident.entity';
 import { XMLParser } from 'fast-xml-parser';
 import { SchedulerError } from '../app/error/scheduler.error';
@@ -73,11 +73,18 @@ export class KtJob extends BaseJob {
           );
           await queryRunner.commitTransaction();
         } catch (e) {
-          // this.loggerService.error(JSON.stringify(e), this.jobName);
           if (queryRunner.isTransactionActive) {
             await queryRunner.rollbackTransaction();
           }
-          throw new SchedulerError(JSON.stringify(e), ErrorLevel.Fatal);
+          if (e instanceof SchedulerError) {
+            if (e.errorLevel === ErrorLevel.Normal) {
+              this.loggerService.error(e.message, this.jobName);
+              continue;
+            }
+            throw e;
+          }
+
+          throw new SchedulerError(`${place.idx} : ${e}`, ErrorLevel.Fatal);
         } finally {
           await queryRunner.release();
         }
@@ -85,11 +92,7 @@ export class KtJob extends BaseJob {
 
       return { result: 'successfully end' };
     } catch (e) {
-      if (e instanceof SchedulerError) {
-        throw e;
-      }
-
-      // throw { error: e, place };
+      throw e;
     }
   }
 
@@ -107,14 +110,14 @@ export class KtJob extends BaseJob {
         }
       }
     } catch (e) {
-      throw { error: e, place };
+      throw new SchedulerError(`${place.idx} : ${e}`, ErrorLevel.Normal);
     }
   }
 
   private async preprocessKtAccident(place: KtPlace, manager?: EntityManager) {
     const placeAccidents = await this.ktPlaceService.getKtPlaceAndAccidents(place.idx);
     if (!placeAccidents) {
-      throw new Error(`not found kt place : ${place.idx}`);
+      throw new SchedulerError(`not found kt place : ${place.idx}`, ErrorLevel.Normal);
     }
     await Promise.all(placeAccidents.accidents.map((accident) => this.ktAccidentService.deleteKtAccident(accident, manager)));
   }

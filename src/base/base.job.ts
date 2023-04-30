@@ -3,6 +3,8 @@ import { LoggerService } from '../app/logger/logger.service';
 import { SentryService } from '../app/sentry/sentry.service';
 import { JobType } from '../app/app.constant';
 import { CronJob, CronTime } from 'cron';
+import { SchedulerError } from '../app/error/scheduler.error';
+import { ErrorLevel } from '../app/error/error.constant';
 
 @Injectable()
 export abstract class BaseJob {
@@ -14,20 +16,15 @@ export abstract class BaseJob {
   constructor(public readonly loggerService: LoggerService, public readonly sentryService: SentryService) {}
 
   async start() {
-    try {
-      if (!this.isValidateCronTime()) {
-        this.loggerService.error(`invalid cron time: ${this.cronTime}`, this.jobName);
-        return;
-      }
-
-      this.cronJob = new CronJob(this.cronTime, () => this.handle());
-
-      this.loggerService.log('start job', this.jobName);
-      this.cronJob.start();
-    } catch (e) {
-      this.loggerService.error(JSON.stringify(e), this.jobName);
-      this.sentryService.sendError(e, this.jobType);
+    if (!this.isValidateCronTime()) {
+      this.loggerService.error(`invalid cron time: ${this.cronTime}`, this.jobName);
+      return;
     }
+
+    this.cronJob = new CronJob(this.cronTime, () => this.handle());
+
+    this.loggerService.log('start job', this.jobName);
+    this.cronJob.start();
   }
 
   async handle() {
@@ -38,8 +35,25 @@ export abstract class BaseJob {
       const diff = (end.getTime() - start.getTime()) / 1000;
       this.loggerService.log(JSON.stringify({ ...result, elapsed: `${diff}s` }), this.jobName);
     } catch (e) {
-      this.loggerService.error(JSON.stringify(e), this.jobName);
+      this.handleError(e);
+    }
+  }
+
+  handleError(e: any) {
+    if (e instanceof SchedulerError) {
+      if (e.errorLevel === ErrorLevel.Normal) {
+        this.loggerService.error(e.message, this.jobName);
+      } else {
+        this.loggerService.error(e.message, this.jobName);
+        this.sentryService.sendError(e, this.jobType);
+        this.cronJob.stop();
+        this.loggerService.error('stop job', this.jobName);
+      }
+    } else {
+      this.loggerService.error(e, this.jobName);
       this.sentryService.sendError(e, this.jobType);
+      this.cronJob.stop();
+      this.loggerService.error('stop job', this.jobName);
     }
   }
 
