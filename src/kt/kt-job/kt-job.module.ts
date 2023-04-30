@@ -20,6 +20,6 @@ import { LoggerModule } from '../../app/logger/logger.module';
     SentryModule,
     LoggerModule,
   ],
-  providers: [KtJobService],
+  providers: [],
 })
 export class KtJobModule {}

@@ -11,6 +11,8 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { RavenInterceptor, RavenModule } from 'nest-raven';
 import { LoggerModule } from './app/logger/logger.module';
 import { MysqlConfigService } from './app/mysql/mysql-config.service';
+import { SchedulerModule } from './scheduler/scheduler.module';
+import { JobModule } from './job/job.module';
 
 export const TypeOrmRootModule = TypeOrmModule.forRootAsync({
   useClass: MysqlConfigService,
@@ -28,6 +30,8 @@ export const TypeOrmRootModule = TypeOrmModule.forRootAsync({
     SktJobModule,
     KtRoadTrafficModule,
     LoggerModule,
+    SchedulerModule,
+    JobModule,
   ],
   providers: [
     {

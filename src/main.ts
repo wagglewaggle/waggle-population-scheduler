@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as Sentry from '@sentry/node';
 import { config } from './app/config/config.service';
+import { SchedulerService } from './scheduler/scheduler.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -10,6 +11,7 @@ async function bootstrap() {
     Sentry.init({ dsn: config.sentryDsn });
   }
 
-  await app.listen(config.schedulerPort, config.schedulerHost);
+  const schedulerService = app.get<SchedulerService>(SchedulerService);
+  schedulerService.start();
 }
 bootstrap();

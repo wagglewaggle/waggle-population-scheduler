@@ -70,9 +70,9 @@ export class KtJobService {
         await sleep(3000);
       }
 
-      this.loggerService.log(`!!!${this.jobName}!!! successfully done`);
+      // this.loggerService.log(`!!!${this.jobName}!!! successfully done`);
     } catch (e) {
-      this.loggerService.error(`!!!${this.jobName}!!! ${JSON.stringify(e)}`);
+      // this.loggerService.error(`!!!${this.jobName}!!! ${JSON.stringify(e)}`);
 
       if (!this.blackListSentry.includes(e.error.Map?.['RESULT.CODE'])) {
         this.sentryService.sendError(e, JobType.KT);

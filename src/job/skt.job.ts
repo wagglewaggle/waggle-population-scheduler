@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import axios, { AxiosResponse } from 'axios';
-import { SktPlaceService } from '../skt-place/skt-place.service';
-import { SktPopulationEntity } from '../skt-population/entity/skt-population.entity';
-import { SktPopulationService } from '../skt-population/skt-population.service';
-import { ISktCityData } from './skt-city-data.interface';
-import { SktDefaultInfo } from './skt-job.constant';
+import { LoggerService } from '../app/logger/logger.service';
+import { SentryService } from '../app/sentry/sentry.service';
+import { SktPlaceService } from '../skt/skt-place/skt-place.service';
+import { SktPopulationService } from '../skt/skt-population/skt-population.service';
+import { SktDefaultInfo } from '../skt/skt-job/skt-job.constant';
+import { JobType } from '../app/app.constant';
 import { SktPlace } from 'waggle-entity/dist/skt-place/skt-place.entity';
-import { SentryService } from '../../app/sentry/sentry.service';
-import { JobType } from '../../app/app.constant';
-import { LoggerService } from '../../app/logger/logger.service';
-import { config } from '../../app/config/config.service';
+import { ISktCityData } from '../skt/skt-job/skt-city-data.interface';
+import axios, { AxiosResponse } from 'axios';
+import { SktPopulationEntity } from '../skt/skt-population/entity/skt-population.entity';
+import { config } from '../app/config/config.service';
 
 @Injectable()
 export class SktJobService {

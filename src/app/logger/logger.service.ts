@@ -64,34 +64,34 @@ export class LoggerService extends ConsoleLogger {
     return this.stdoutLogger;
   }
 
-  log(message: string, meta?: unknown): void {
-    this.getFileLogger(false).info(message, meta);
+  log(message: string, jobName: string, meta?: unknown): void {
+    this.getFileLogger(false).info(`[${jobName}] ${message}`, meta);
     if (this.needConsole) {
-      this.getConsoleLogger().info(message, meta);
+      this.getConsoleLogger().info(`[${jobName}] ${message}`, meta);
     }
   }
-  warn(message: string, meta?: unknown): void {
-    this.getFileLogger(false).warn(message, meta);
+  warn(message: string, jobName: string, meta?: unknown): void {
+    this.getFileLogger(false).warn(`[${jobName}] ${message}`, meta);
     if (this.needConsole) {
-      this.getConsoleLogger().warn(message, meta);
+      this.getConsoleLogger().warn(`[${jobName}] ${message}`, meta);
     }
   }
-  debug(message: string, meta?: unknown): void {
-    this.getFileLogger(false).info(message, meta);
+  debug(message: string, jobName: string, meta?: unknown): void {
+    this.getFileLogger(false).info(`[${jobName}] ${message}`, meta);
     if (this.needConsole) {
-      this.getConsoleLogger().info(message, meta);
+      this.getConsoleLogger().info(`[${jobName}] ${message}`, meta);
     }
   }
-  verbose(message: string, meta?: unknown): void {
-    this.getFileLogger(false).info(message, meta);
+  verbose(message: string, jobName: string, meta?: unknown): void {
+    this.getFileLogger(false).info(`[${jobName}] ${message}`, meta);
     if (this.needConsole) {
-      this.getConsoleLogger().info(message, meta);
+      this.getConsoleLogger().info(`[${jobName}] ${message}`, meta);
     }
   }
-  error(message: string, meta?: unknown): void {
-    this.getFileLogger(true).error(message, meta);
+  error(message: string, jobName: string, meta?: unknown): void {
+    this.getFileLogger(true).error(`[${jobName}] ${message}`, meta);
     if (this.needConsole) {
-      this.getConsoleLogger().error(message, meta);
+      this.getConsoleLogger().error(`[${jobName}] ${message}`, meta);
     }
   }
 }
