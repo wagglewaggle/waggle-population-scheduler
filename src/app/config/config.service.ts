@@ -29,6 +29,8 @@ export class ConfigService {
       MYSQL_DATABASE: Joi.string().required(),
       MYSQL_USERNAME: Joi.string().required(),
       MYSQL_PASSWORD: Joi.string(),
+      KT_CRON_TIME: Joi.string().required(),
+      SKT_CRON_TIME: Joi.string().required(),
       KT_API_KEY: Joi.string().required(),
       SKT_CONGESTION_API_KEY: Joi.string().required(),
       SLACK_API_SERVER: Joi.string().required(),
@@ -75,6 +77,12 @@ export class ConfigService {
   }
   get mysqlPassword(): string {
     return this.envConfig.MYSQL_PASSWORD;
+  }
+  get ktCronTime(): string {
+    return this.envConfig.KT_CRON_TIME;
+  }
+  get sktCronTime(): string {
+    return this.envConfig.SKT_CRON_TIME;
   }
   get ktApiKey(): string {
     return this.envConfig.KT_API_KEY;

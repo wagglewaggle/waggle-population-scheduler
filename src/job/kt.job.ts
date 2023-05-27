@@ -21,9 +21,9 @@ import { KtRoadTrafficEntity } from '../kt/kt-road-traffic/entity/kt-road-traffi
 
 @Injectable()
 export class KtJob extends BaseJob {
-  jobName = 'ktJob';
+  jobName = 'KT-POPULATION-JOB';
   jobType = JobType.KT;
-  cronTime = '0 */5 * * * *';
+  cronTime = config.ktCronTime;
   private readonly xmlParser: XMLParser;
   private readonly API_HOST = 'http://openapi.seoul.go.kr:8088';
   private readonly API_URI = 'xml/citydata/1/5';
@@ -44,6 +44,7 @@ export class KtJob extends BaseJob {
   }
 
   async run(): Promise<Record<string, any>> {
+    this.loggerService.log('job start', this.jobName);
     try {
       const places = await this.ktPlaceService.getKtPlaces();
 

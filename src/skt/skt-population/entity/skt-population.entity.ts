@@ -1,7 +1,7 @@
 import { SktPlace } from 'waggle-entity/dist/skt-place/skt-place.entity';
 import { SktPopulationLevel } from 'waggle-entity/dist/skt-population/skt-population.constant';
 import { SktPopulation } from 'waggle-entity/dist/skt-population/skt-population.entity';
-import { ISktRealTimeCongestion } from '../../skt-job/skt-city-data.interface';
+import { ISktRealTimeCongestion } from '../../../job/skt-city-data.interface';
 
 export class SktPopulationEntity extends SktPopulation {
   readonly idx: number;

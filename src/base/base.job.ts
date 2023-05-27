@@ -23,7 +23,7 @@ export abstract class BaseJob {
 
     this.cronJob = new CronJob(this.cronTime, () => this.handle());
 
-    this.loggerService.log('start job', this.jobName);
+    this.loggerService.log(this.cronTime, this.jobName);
     this.cronJob.start();
   }
 

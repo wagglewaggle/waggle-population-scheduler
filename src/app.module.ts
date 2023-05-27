@@ -1,6 +1,5 @@
 import { HttpException, Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
-import { SktJobModule } from './skt/skt-job/skt-job.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { KtPlaceModule } from './kt/kt-place/kt-place.module';
 import { KtPopulationModule } from './kt/kt-population/kt-population.module';
@@ -25,7 +24,6 @@ export const TypeOrmRootModule = TypeOrmModule.forRootAsync({
     KtPlaceModule,
     KtPopulationModule,
     KtAccidentModule,
-    SktJobModule,
     KtRoadTrafficModule,
     LoggerModule,
     SchedulerModule,
