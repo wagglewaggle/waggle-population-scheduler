@@ -9,7 +9,6 @@ import { KtAccidentService } from '../kt/kt-accident/kt-accident.service';
 import { KtRoadTrafficService } from '../kt/kt-road-traffic/kt-road-traffic.service';
 import { DataSource, EntityManager, QueryRunner } from 'typeorm';
 import { KtPlace } from 'waggle-entity/dist/kt-place/kt-place.entity';
-import { IAccidentObject, IKtCityData } from './kt-city-data.interface';
 import { KtAccidentEntity } from '../kt/kt-accident/entity/kt-accident.entity';
 import { XMLParser } from 'fast-xml-parser';
 import { SchedulerError } from '../app/error/scheduler.error';
@@ -18,6 +17,8 @@ import Axios from 'axios';
 import { config } from '../app/config/config.service';
 import { KtPopulationEntity } from '../kt/kt-population/entity/kt-population.entity';
 import { KtRoadTrafficEntity } from '../kt/kt-road-traffic/entity/kt-road-traffic.entity';
+import { IAccidentObject, IKtCityData } from './city-data.interface';
+import { KtApi } from './job.constant';
 
 @Injectable()
 export class KtJob extends BaseJob {
@@ -25,8 +26,6 @@ export class KtJob extends BaseJob {
   jobType = JobType.KT;
   cronTime = config.ktCronTime;
   private readonly xmlParser: XMLParser;
-  private readonly API_HOST = 'http://openapi.seoul.go.kr:8088';
-  private readonly API_URI = 'xml/citydata/1/5';
   private readonly url: string;
 
   constructor(
@@ -40,7 +39,7 @@ export class KtJob extends BaseJob {
   ) {
     super(loggerService, sentryService);
     this.xmlParser = new XMLParser();
-    this.url = `${this.API_HOST}/${config.ktApiKey}/${this.API_URI}`;
+    this.url = `${KtApi.HOST}/${config.ktApiKey}/${KtApi.ENDPOINT}`;
   }
 
   async run(): Promise<Record<string, any>> {

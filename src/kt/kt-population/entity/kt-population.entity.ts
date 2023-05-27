@@ -1,7 +1,7 @@
 import { KtPlace } from 'waggle-entity/dist/kt-place/kt-place.entity';
 import { KtPopulationLevel } from 'waggle-entity/dist/kt-population/kt-population.constant';
 import { KtPopulation } from 'waggle-entity/dist/kt-population/kt-population.entity';
-import { ILivePopulationStatus } from '../../../job/kt-city-data.interface';
+import { ILivePopulationStatus } from '../../../job/city-data.interface';
 
 export class KtPopulationEntity extends KtPopulation {
   readonly idx: number;

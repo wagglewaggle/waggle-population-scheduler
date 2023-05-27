@@ -11,15 +11,14 @@ import { SktPlace } from 'waggle-entity/dist/skt-place/skt-place.entity';
 import axios, { AxiosResponse } from 'axios';
 import { SktPopulationEntity } from '../skt/skt-population/entity/skt-population.entity';
 import { ErrorLevel } from '../app/error/error.constant';
-import { ISktCityData } from './skt-city-data.interface';
+import { ISktCityData } from './city-data.interface';
+import { SktApi } from './job.constant';
 
 @Injectable()
 export class SktJob extends BaseJob {
   jobName = 'SKT-POPULATION-JOB';
   jobType = JobType.SKT;
   cronTime = config.sktCronTime;
-  private readonly API_HOST = 'https://apis.openapi.sk.com';
-  private readonly API_URI = 'puzzle/place/congestion/rltm/pois';
   private readonly url: string;
 
   constructor(
@@ -29,7 +28,7 @@ export class SktJob extends BaseJob {
     public readonly sentryService: SentryService,
   ) {
     super(loggerService, sentryService);
-    this.url = `${this.API_HOST}/${this.API_URI}`;
+    this.url = `${SktApi.HOST}/${SktApi.ENDPOINT}`;
   }
 
   async run() {

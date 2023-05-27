@@ -1,6 +1,6 @@
 import { KtPlace } from 'waggle-entity/dist/kt-place/kt-place.entity';
 import { KtRoadTraffic } from 'waggle-entity/dist/kt-road-traffic/kt-road-traffic.entity';
-import { IRoadTraffic } from '../../../job/kt-city-data.interface';
+import { IRoadTraffic } from '../../../job/city-data.interface';
 
 export class KtRoadTrafficEntity extends KtRoadTraffic {
   readonly idx: number;
