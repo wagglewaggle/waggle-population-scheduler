@@ -39,8 +39,8 @@ export class SktJob extends BaseJob {
         await this.updateSktPopulation(place);
       }
     } catch (e) {
-      this.loggerService.error(JSON.stringify(e), this.jobName);
-      throw new SchedulerError(JSON.stringify(e), ErrorLevel.Normal);
+      this.loggerService.error(e, this.jobName);
+      throw new SchedulerError(e, ErrorLevel.Normal);
     }
     return { result: 'successfully end' };
   }
@@ -57,7 +57,7 @@ export class SktJob extends BaseJob {
         contents: { rltm },
       } = data;
 
-      await this.sktPopulationService.addSktPopulation(new SktPopulationEntity(place, rltm, updatedDate));
+      await this.sktPopulationService.addSktPopulation(new SktPopulationEntity(place, rltm[0], updatedDate));
     } catch (e) {
       throw e;
     }
