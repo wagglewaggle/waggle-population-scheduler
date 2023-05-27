@@ -64,11 +64,12 @@ export interface ISktCityData {
   contents: {
     poiId: string;
     poiName: string;
-    rltm: ISktRealTimeCongestion;
+    rltm: ISktRealTimeCongestion[];
   };
 }
 
 export interface ISktRealTimeCongestion {
+  type: number;
   congestion: number;
   congestionLevel: number;
   datetime: string;
