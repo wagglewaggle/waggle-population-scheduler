@@ -43,7 +43,7 @@ export class KtJob extends BaseJob {
   }
 
   async run(): Promise<Record<string, any>> {
-    this.loggerService.log('job start', this.jobName);
+    this.loggerService.log('job started', this.jobName);
     try {
       const places = await this.ktPlaceService.getKtPlaces();
 

@@ -47,13 +47,13 @@ export abstract class BaseJob {
         this.loggerService.error(e.message, this.jobName);
         this.sentryService.sendError(e, this.jobType);
         this.cronJob.stop();
-        this.loggerService.error('stop job', this.jobName);
+        this.loggerService.error('job stopped', this.jobName);
       }
     } else {
       this.loggerService.error(e, this.jobName);
       this.sentryService.sendError(e, this.jobType);
       this.cronJob.stop();
-      this.loggerService.error('stop job', this.jobName);
+      this.loggerService.error('job stopped', this.jobName);
     }
   }
 
