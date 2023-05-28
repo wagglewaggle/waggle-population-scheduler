@@ -32,15 +32,19 @@ export class SktJob extends BaseJob {
   }
 
   async run() {
-    this.loggerService.log('start job', this.jobName);
+    this.loggerService.log('job started', this.jobName);
     try {
       const places = await this.sktPlaceService.getSktPlaces();
-      for (const place of places) {
-        await this.updateSktPopulation(place);
-      }
+      await Promise.all(places.map((place) => this.updateSktPopulation(place)));
     } catch (e) {
-      this.loggerService.error(e, this.jobName);
-      throw new SchedulerError(e, ErrorLevel.Normal);
+      if (e instanceof SchedulerError) {
+        if (e.errorLevel === ErrorLevel.Normal) {
+          this.loggerService.error(e.message, this.jobName);
+        }
+        throw e;
+      }
+
+      throw new SchedulerError(e, ErrorLevel.Fatal);
     }
     return { result: 'successfully end' };
   }
@@ -59,7 +63,7 @@ export class SktJob extends BaseJob {
 
       await this.sktPopulationService.addSktPopulation(new SktPopulationEntity(place, rltm[0], updatedDate));
     } catch (e) {
-      throw e;
+      throw new SchedulerError(e, ErrorLevel.Normal);
     }
   }
 }
