@@ -89,7 +89,7 @@ export class KtJob extends BaseJob {
             throw e;
           }
 
-          throw new SchedulerError(`${place.idx} : ${e}`, ErrorLevel.Fatal);
+          throw new SchedulerError(`[${place.name}(${place.idx})] : ${e}`, ErrorLevel.Fatal);
         } finally {
           await queryRunner.release();
         }
