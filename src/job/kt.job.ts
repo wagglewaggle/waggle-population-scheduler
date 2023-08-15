@@ -45,7 +45,7 @@ export class KtJob extends BaseJob {
   async run(): Promise<Record<string, any>> {
     this.loggerService.log('job started', this.jobName);
     try {
-      const places = await this.ktPlaceService.getKtPlaces();
+      const places = await this.ktPlaceService.getActivatedPlaces();
 
       for await (const place of places) {
         const connection = this.dataSource;
@@ -67,12 +67,17 @@ export class KtJob extends BaseJob {
             new KtPopulationEntity(place, result['SeoulRtd.citydata'].CITYDATA.LIVE_PPLTN_STTS, new Date()),
             manager,
           );
-          await this.ktRoadTrafficService.addKtRoadTraffic(
-            new KtRoadTrafficEntity(place, result['SeoulRtd.citydata'].CITYDATA.ROAD_TRAFFIC_STTS.AVG_ROAD_DATA),
-            manager,
-          );
+
+          /** roadTraffic이 undefined일 경우에 대한 방어로직 */
+          const roadTraffic = result['SeoulRtd.citydata'].CITYDATA.ROAD_TRAFFIC_STTS.AVG_ROAD_DATA;
+          if (roadTraffic) {
+            await this.ktRoadTrafficService.addKtRoadTraffic(new KtRoadTrafficEntity(place, roadTraffic), manager);
+          }
+
           await queryRunner.commitTransaction();
+          this.loggerService.log(`[${place.name}(${place.idx})] successfully updated`, this.jobName);
         } catch (e) {
+          this.loggerService.error(`[${place.name}(${place.idx})] update failed`, this.jobName);
           if (queryRunner.isTransactionActive) {
             await queryRunner.rollbackTransaction();
           }

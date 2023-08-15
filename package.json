@@ -39,7 +39,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
     "typeorm": "^0.3.15",
-    "waggle-entity": "^1.0.2",
+    "waggle-entity": "2.1.0",
     "winston": "^3.8.2",
     "winston-daily-rotate-file": "^4.7.1"
   },
