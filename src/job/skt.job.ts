@@ -34,7 +34,7 @@ export class SktJob extends BaseJob {
   async run() {
     this.loggerService.log('job started', this.jobName);
     try {
-      const places = await this.sktPlaceService.getSktPlaces();
+      const places = await this.sktPlaceService.getActivatedPlaces();
       await Promise.all(places.map((place) => this.updateSktPopulation(place)));
     } catch (e) {
       if (e instanceof SchedulerError) {
