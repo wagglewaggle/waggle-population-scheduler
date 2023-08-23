@@ -44,7 +44,7 @@ export class SktJob extends BaseJob {
         throw e;
       }
 
-      throw new SchedulerError(e, ErrorLevel.Fatal);
+      throw new SchedulerError(e, ErrorLevel.Normal);
     }
     return { result: 'successfully end' };
   }

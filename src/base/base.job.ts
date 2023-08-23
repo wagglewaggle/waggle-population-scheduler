@@ -41,11 +41,9 @@ export abstract class BaseJob {
 
   handleError(e: any) {
     if (e instanceof SchedulerError) {
-      if (e.errorLevel === ErrorLevel.Normal) {
-        this.loggerService.error(e.message, this.jobName);
-      } else {
-        this.loggerService.error(e.message, this.jobName);
-        this.sentryService.sendError(e, this.jobType);
+      this.loggerService.error(e.message, this.jobName);
+      this.sentryService.sendError(e, this.jobType);
+      if (e.errorLevel === ErrorLevel.Fatal) {
         this.cronJob.stop();
         this.loggerService.error('job stopped', this.jobName);
       }
